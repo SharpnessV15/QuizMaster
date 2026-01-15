@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center inline ">
+        <h2>Current Courses</h2>
+        <a href="{{url_for('start')}}" class="btn btn-outline-light btn-sm">BACK</a>
+    </div>
+    
+        <div class="row mt-3">
+            {%for subject in subject%}
+            <div class="col-md-3">
+                <a href="{{url_for('chapters',sid = subject.id)}}" class="text-decoration-none">
+                    <div class="card bg-dark text-white rounded-lg card-hover mt-4">
+                        <div class="card-body">
+                            <h4 class="card-title">{{subject.name}}</h4>
+                            <hr style="border-top: 3px solid white;">
+                            <small>{{subject.description}}</small>
+                            <ul class="mt-2">
+                                {%for chapter in chapters%}
+                                    {%if chapter.subject_id==subject.id%}
+                                        <li>{{chapter.name}}</li>
+                                    {%endif%}
+                                {%endfor%}
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+                <!-- add a cancel thing here-->
+                {%if current_user.email=='admin'%}
+                    <a href="{{url_for('edits',sid=subject.id)}}" class="btn btn-outline-info btn-block mt-1">EDIT</a>
+                    <a href="{{url_for('subdel',id=subject.id)}}" class="btn btn-outline-danger btn-block mt-1">DELETE</a>
+                {%endif%}
+            </div>
+            {%endfor%}
+        </div>
+        {%if current_user.email=='admin'%}
+            <a href="{{url_for('subcre')}}" class="btn btn-primary btn-lg rounded-circle ml-auto mt-2 justify-content-center align-items-center">+</a>        
+        {%endif%}
+    </div>
+
+
+
+
+
+<style>
+.card-hover {
+    border-radius: 10px !important;
+}
+
+.card-hover:hover {
+    background-color: #495057 !important;
+}
+</style>
+
+{% endblock %}

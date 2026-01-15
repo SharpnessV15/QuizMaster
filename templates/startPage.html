@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Start Page{% endblock %}
+
+
+{% block body %}
+<div class="container text-center mt-5">
+    <h1>Welcome to Quizzer</h1>
+    <p>Let your Academic rise begin </p>
+    {%if current_user.is_authenticated %}
+    {%else%}
+        <a href="{{url_for('login')}}" class="btn btn-primary mt-3">Login</a>
+        <br>
+        <a href="{{url_for('register')}}" class="btn btn-primary mt-3">Register</a>
+    {%endif%}
+</div>
+{% endblock %}

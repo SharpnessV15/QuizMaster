@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Quizzes{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center inline">
+        <h2>Quizzes</h2>
+        <a href="{{url_for('chapters',sid=chapter.subject_id)}}" class="btn btn-outline-light btn-sm">BACK</a>
+    </div>
+    
+    <div class="row mt-3">
+        {%for quiz in quizzes%}
+        <div class="col-md-3">
+            {%if current_user.email=="admin"%}
+                <a href="{{url_for('questioncre', qid=quiz.id)}}" class="text-decoration-none">
+            {%else%}
+                <a href="{{url_for('quiz', qid=quiz.id)}}" class="text-decoration-none">
+            {%endif%}
+                    <div class="card bg-dark text-white rounded-lg card-hover mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{quiz.name}}</h5>
+                            <hr style="border-top: 3px solid white;">
+                            <ul class="mt-2 list-unstyled">
+                                <li>Date added : {{quiz.date_of_quiz.strftime('%d-%m-%y')}}</li>
+                                <li>Quiz Time: {{quiz.time_duration}}</li>
+                                <li>Remarks: {{quiz.remarks}}</li>
+                                {%for score in scores%}
+                                    {%if score.quiz_id==quiz.id and score.user_id==current_user.id%}
+                                        <li>Marks: {{score.percentage}}</li>
+                                    {%endif%}
+                                {%endfor%}
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            {%if current_user.email=='admin'%}
+                <a href="{{url_for('quizdel',qid=quiz.id)}}" class="btn btn-outline-danger btn-block mt-1">DELETE</a>
+            {%endif%}
+        
+        </div>
+        {%endfor%}
+    </div>
+    {%if current_user.email=='admin'%}
+        <a href="{{url_for('quizcre',cid=chapter.id)}}" class="btn btn-primary btn-lg rounded-circle ml-auto mt-2 justify-content-center align-items-center">+</a>        
+    {%endif%}
+</div>
+
+
+
+
+
+<style>
+.card-hover {
+    border-radius: 10px !important;
+}
+
+.card-hover:hover {
+    background-color: #495057 !important;
+}
+</style>
+
+{% endblock %}

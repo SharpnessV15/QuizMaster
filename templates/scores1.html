@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Report{% endblock %}
+
+{% block body %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Score Report</h2>
+    {% for subject in subjects %}
+    
+    <div class="card bg-dark text-white mb-4 shadow-lg">
+        <div class="card-header text-center font-weight-bold"id="subject-header-{{subject.id}}" >{{ subject.name }}</div>
+        <div class="card-body" id="subject-body-{{subject.id}}">
+            {% for chapter in chapters %}
+                {% if chapter.subject_id == subject.id %}
+                    <h5 class="font-weight-bold text-info" id="chapter-header-{{chapter.id}}">{{ chapter.name }}</h5>
+                    <div id="chapter-body-{{chapter.id}}">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-dark">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Score</th>
+                                    <th>Percentage</th>
+                                    <th>Date attempted</th>
+                                    <th>Time attempted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quizzes %}
+                                    {% if quiz.chapter_id == chapter.id %}
+
+                                        <tr>
+                                            
+                                            {% for score in scores %}
+                                                {% if score.quiz_id == quiz.id %}
+                                                    {%if score.user_id == uid%}
+                                                        <td><a href="#" class="text-primary font-weight-bold">{{ quiz.name }}</a></td>
+                                                        <td>{{ score.total_scored }}</td>
+                                                        <td>{{ score.percentage }}</td>
+                                                        <td>{{ score.time_stamp_of_attempt.strftime('%d %m %Y') }}</td>
+                                                        <td>{{ score.time_stamp_of_attempt.strftime('%I:%M %p') }}</td>    
+                                                    {%endif%}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+
+                    <canvas id='myChart{{ chapter.id }}' width="400" height="200"></canvas>
+                    <script>
+                        console.log('Chart Data:', JSON.parse('{{ chartData | tojson | safe }}'));
+                        const chartData{{chapter.id}} = JSON.parse('{{ chartData | tojson | safe }}');
+                        const chapterId{{chapter.id}} = {{ chapter.id }};
+                        let newChart{{chapter.id}} = new Chart(document.getElementById('myChart{{chapter.id}}'),{
+                            type: 'line',
+                            data:{
+                                labels: chartData{{chapter.id}}[chapterId{{chapter.id}}].labels,
+                                datasets: [{
+                                    label: 'Scores',
+                                    data: chartData{{chapter.id}}[chapterId{{chapter.id}}].scores,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                    fill:true
+                                }]
+                            
+                            },
+                            options: { responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        })
+                    </script>
+                    </div>
+                    <script>
+                        $(document).ready(function(){
+                            // Hide the content initially
+                            $("#chapter-body-{{chapter.id}}").hide();
+                            
+                            // Add click handler for this specific subject
+                            $("#chapter-header-{{chapter.id}}").click(()=>{
+                                $("#chapter-body-{{chapter.id}}").show();
+                            });
+                        });
+                    </script>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+    </div>
+    <script>
+        $(document).ready(function(){
+            // Hide the content initially
+            $("#subject-body-{{subject.id}}").hide();
+            
+            // Add click handler for this specific subject
+            $("#subject-header-{{subject.id}}").click(()=>{
+                $("#subject-body-{{subject.id}}").show();
+            });
+        });
+    </script>
+    {% endfor %}
+</div>
+{% endblock %}

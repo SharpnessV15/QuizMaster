@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Report{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Score Report</h2>
+    {% for subject in subjects %}
+    <div class="card bg-dark text-white mb-4 shadow-lg">
+        <div class="card-header text-center font-weight-bold">{{ subject.name }}</div>
+        <div class="card-body">
+            {% for chapter in chapters %}
+                {% if chapter.subject_id == subject.id %}
+                    <h5 class="font-weight-bold text-info">{{ chapter.name }}</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-dark">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Score</th>
+                                    <th>Percentage</th>
+                                    <th>Date attempted</th>
+                                    <th>Time attempted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quizzes %}
+                                    {% if quiz.chapter_id == chapter.id %}
+
+                                        <tr>
+                                            
+                                            {% for score in scores %}
+                                                {% if score.quiz_id == quiz.id %}
+                                                    {%if score.user_id == uid%}
+                                                        <td><a href="#" class="text-primary font-weight-bold">{{ quiz.name }}</a></td>
+                                                        <td>{{ score.total_scored }}</td>
+                                                        <td>{{ score.percentage }}</td>
+                                                        <td>{{ score.time_stamp_of_attempt.strftime('%d %m %Y') }}</td>
+                                                        <td>{{ score.time_stamp_of_attempt.strftime('%I:%M %p') }}</td>    
+                                                    {%endif%}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Add Questions{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center ">
+        <h2>Questions:</h2>
+    </div>
+    <form method="POST" action="{{ url_for('quizcheck',qid=questions[0].quiz_id) }}">
+        {%for question in questions%}
+            <div>
+                
+                <div class="card bg-secondary text-white rounded-lg mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{question.question_statement}}</h5>
+                    </div>
+                </div>
+                <div>
+                    <input type="radio" id="{{question.id}}id" name="{{question.id}}" value=1>
+                    <label for="{{question.id}}id1" >{{question.option1}}</label><br>
+                    <input type="radio" id="{{question.id}}id" name="{{question.id}}" value=2>
+                    <label for="{{question.id}}id2" >{{question.option2}}</label><br>
+                    <input type="radio" id="{{question.id}}id" name="{{question.id}}" value=3>   
+                    <label for="{{question.id}}id3" >{{question.option3}}</label><br>
+                    <input type="radio" id="{{question.id}}id" name="{{question.id}}" value=4>   
+                    <label for="{{question.id}}id4" >{{question.option4}}</label><br>       
+                </div>
+            </div>
+        {%endfor%}
+        <button type="submit" class="btn btn-primary btn-block mt-4 mb-4">Submit Quiz</button>
+    </form>
+
+</div>
+{%endblock%}

@@ -1,0 +1,31 @@
+{%extends "base.html"%}
+{%block title%}Register{%endblock%}
+
+{%block body%}
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <form method="POST" class="form-register w-50 p-4 rounded shadow bg-dark text-white" style="color:white">
+        {{form.hidden_tag()}}
+        {{form.firstname.label()}}
+        {{form.firstname(class="form-control",placeholder="Firstname")}}
+
+        {{form.lastname.label()}}
+        {{form.lastname(class="form-control",placeholder="Lastname")}}
+
+        {{form.email.label()}}
+        {{form.email(class="form-control",placeholder="Email")}}
+
+        {{form.qualification.label()}}
+        {{form.qualification(class="form-control",placeholder="qualifications")}}
+
+        {{form.dob.label()}}
+        {{form.dob(class="form-control",placeholder="Date of Birth")}}
+
+        {{form.password.label()}}
+        {{form.password(class="form-control",placeholder="Password")}}
+
+        {{form.checkpwd.label()}}
+        {{form.checkpwd(class="form-control",placeholder="Confirm Password")}}
+        <br>
+        <button class="btn btn-md btn-primary btn-block" type="submit">Register</button>
+    </form>
+{%endblock%}

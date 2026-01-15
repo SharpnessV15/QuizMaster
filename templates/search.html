@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Search</h1>
+    <br>
+    <h3>Subjects:</h3>
+    <div class="row mt-3">
+        
+        {%for subject in subjects%}
+        <div class="col-md-3">
+            <a href="{{url_for('chapters',sid = subject.id)}}" class="text-decoration-none">
+                <div class="card bg-dark text-white rounded-lg card-hover mt-4">
+                    <div class="card-body">
+                        <h4 class="card-title">{{subject.name}}</h4>
+                        <hr style="border-top: 3px solid white;">
+                        <small>{{subject.description}}</small>
+                        <ul class="mt-2">
+                            {%for chapter in chapters%}
+                                {%if chapter.subject_id==subject.id%}
+                                    <li>{{chapter.name}}</li>
+                                {%endif%}
+                            {%endfor%}
+                        </ul>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {%endfor%}
+    </div>
+    <br>
+    <h3>Chapters:</h3>
+    <div class="row mt-3">
+        {%for chapter in chapters%}
+        <div class="col-md-3">
+            <a href="{{url_for('quizzes', cid=chapter.id)}}" class="text-decoration-none">
+                <div class="card bg-dark text-white rounded-lg card-hover mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{chapter.name}}</h5>
+                        <hr style="border-top: 3px solid white;">
+                        <small>{{chapter.description}}</small>
+                        <ul class="mt-2">
+                            {%for quiz in quizzes%}
+                                {%if quiz.chapter_id==chapter.id%}
+                                    <li>{{quiz.name}}</li>
+                                {%endif%}
+                            {%endfor%}
+                        </ul>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {%endfor%}
+    </div>
+    <br>
+    <h3>Quizzes:</h3>
+    <div class="row mt-3">
+        {%for quiz in quizzes%}
+        <div class="col-md-3">
+            <a href="{{url_for('quiz', qid=quiz.id)}}" class="text-decoration-none">
+            <div class="card bg-dark text-white rounded-lg card-hover mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{quiz.name}}</h5>
+                    <hr style="border-top: 3px solid white;">
+                    <ul class="mt-2">
+                        <li>Date added : {{quiz.date_of_quiz}}</li>
+                        <li>Quiz Time: {{quiz.time_duration}}</li>
+                        <li>Remarks: {{quiz.remarks}}</li>
+                        <li>Marks: {{quiz.percent}}</li>
+                    </ul>
+                </div>
+            </div>
+            </a>        
+        </div>
+        {%endfor%}
+    </div>
+
+    
+    {%if current_user.email == "admin"%}
+        <br>
+        <h3>Users:</h3>
+        
+        <div class="row mt-3">
+            {%for user in users%}
+                {%if user.email != "admin"%}
+                    <div class="col-md-3">
+                        <a href="{{url_for('scores', uid=user.id)}}" class="text-decoration-none">
+                        <div class="card bg-dark text-white rounded-lg card-hover mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{user.name}}</h5>
+                            </div>
+                        </div>
+                        </a>        
+                    </div>
+                {%endif%}
+            {%endfor%}
+        </div>
+    {%endif%}
+</div>
+{% endblock %}
